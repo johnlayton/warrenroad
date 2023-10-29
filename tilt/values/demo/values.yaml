@@ -1,0 +1,18 @@
+extraEnvVars:
+  - name: SPRING_DATASOURCE_URL
+    value: 'jdbc:postgresql://postgresql-db:5432/demo'
+  - name: SPRING_DATASOURCE_USERNAME
+    value: 'dbuser'
+  - name: SPRING_DATASOURCE_PASSWORD
+    value: 'dbpass'
+
+springboot:
+  profile: "default"
+
+resources:
+  limits:
+    memory: "1Gi"
+    cpu: "1"
+  requests:
+    memory: "1Gi"
+    cpu: "1"
