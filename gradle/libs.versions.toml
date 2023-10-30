@@ -1,7 +1,7 @@
 [versions]
 testcontainers = '1.17.6'
 mapstruct = '1.5.5.Final'
-springboot = '3.1.4'
+springboot = '3.1.5'
 springcloud = '2022.0.0'
 springdoc= '2.2.0'
 

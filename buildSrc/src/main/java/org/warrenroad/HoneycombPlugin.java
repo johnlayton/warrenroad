@@ -20,9 +20,8 @@ import java.util.Map;
 
 public class HoneycombPlugin implements Plugin<Project> {
 
-    interface HoneycombExtension {
+    public interface HoneycombExtension {
         RegularFileProperty getConfig();
-
         Property<String> getAppName();
     }
 
@@ -97,8 +96,8 @@ public class HoneycombPlugin implements Plugin<Project> {
     }
 
     private File defaultConfigurationProvider() {
-        try (InputStream is = HoneycombPlugin.class.getClassLoader().getResourceAsStream("Honeycomb.yml")) {
-            File file = File.createTempFile("Honeycomb-", ".yml");
+        try (InputStream is = HoneycombPlugin.class.getClassLoader().getResourceAsStream("honeycomb.yml")) {
+            File file = File.createTempFile("honeycomb-", ".yml");
             Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             return file;
         } catch (final IOException e) {

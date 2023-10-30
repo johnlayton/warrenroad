@@ -1,3 +1,6 @@
+import org.warrenroad.HoneycombPlugin
+import org.warrenroad.HoneycombPlugin.HoneycombExtension
+
 //plugins {
 //    id("java")
 //    alias(libs.plugins.spring.boot)
@@ -21,6 +24,7 @@
 )
 plugins {
     id("java")
+    id("honeycomb")
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
 }
@@ -43,9 +47,28 @@ dependencies {
 }
 
 
-//springBoot {
-//    buildInfo()
+springBoot {
+    buildInfo()
+}
+
+configure<HoneycombExtension> {
+    appName = "WarrenRoad::Demo"
+}
+
+//tasks.bootRun {
+//    jvmArgs = [
+//        '-javaagent:/newrelic.jar'
+//    ]
 //}
+
+//honeycomb {
+//    appName = "WarrenRoad::Demo"
+//}
+
+//bootRun {
+//
+//}
+
 //
 //bootJar {
 //    archiveFileName = 'timetable-service.jar'
