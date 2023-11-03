@@ -61,11 +61,13 @@ public class HoneycombPlugin implements Plugin<Project> {
                 });
 
 
+/*
         project.getTasks().stream().filter(t -> t.getName().equals("assemble"))
                 .findFirst().ifPresent(t -> {
                     t.dependsOn(copyHoneycombArtifacts);
                     t.dependsOn(copyHoneycombConfiguration);
                 });
+*/
     }
 
     @NotNull

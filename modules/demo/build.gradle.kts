@@ -1,3 +1,4 @@
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 import org.warrenroad.HoneycombPlugin
 import org.warrenroad.HoneycombPlugin.HoneycombExtension
 
@@ -84,6 +85,20 @@ configure<HoneycombExtension> {
 //        "build/new-relic:/platform/bindings/new-relic"
 //    ]
 //}
+
+tasks.named<BootBuildImage>("bootBuildImage") {
+//    builder.set("mine/java-cnb-builder")
+//    runImage.set("mine/java-cnb-run")
+    buildpacks.set(listOf(
+            "urn:cnb:builder:paketo-buildpacks/java",
+            "gcr.io/paketo-buildpacks/opentelemetry"
+//            "gcr.io/paketo-buildpacks/opentelemetry"
+//            "gcr.io/paketo-buildpacks/new-relic"
+    ))
+    environment.set(mapOf(
+            "BP_OPENTELEMETRY_ENABLED" to "true"
+    ))
+}
 //
 //newRelic {
 //    appName = "Demo"
