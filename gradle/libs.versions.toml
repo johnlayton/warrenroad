@@ -35,6 +35,7 @@ springdoc-openapi-starter-webmvc-ui = { group = 'org.springdoc', name = 'springd
 springdoc-openapi-starter-webmvc-api = { group = 'org.springdoc', name = 'springdoc-openapi-starter-webmvc-api', version.ref = 'springdoc'}
 com-newrelic-agent-java = { group = 'com.newrelic.agent.java', name = 'newrelic-agent', version = '8.0.0' }
 io-honeycomb-opentelemetry-javaagent = { group = 'io.honeycomb', name = 'honeycomb-opentelemetry-javaagent', version = '1.5.2' }
+opentelemetry-javaagent = { group = 'io.opentelemetry.javaagent', name = 'opentelemetry-javaagent', version = '1.31.0' }
 
 [bundles]
 testcontainers = [

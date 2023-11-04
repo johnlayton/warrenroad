@@ -1,5 +1,5 @@
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
-import org.warrenroad.HoneycombPlugin
+import org.springframework.boot.gradle.tasks.run.BootRun
 import org.warrenroad.HoneycombPlugin.HoneycombExtension
 
 //plugins {
@@ -26,6 +26,7 @@ import org.warrenroad.HoneycombPlugin.HoneycombExtension
 plugins {
     id("java")
     id("honeycomb")
+    id("opentel")
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
 }
@@ -69,7 +70,26 @@ configure<HoneycombExtension> {
 //bootRun {
 //
 //}
+tasks.getByName<BootRun>("bootRun") {
+//    main = "com.example.ExampleApplication"
+    setEnvironment(mapOf(
+        "HONEYCOMB_API_KEY" to System.getenv("HONEYCOMB_API_KEY"),
+        "OTEL_SERVICE_NAME" to System.getenv("Demo"),
+        "OTEL_EXPORTER_OTLP_ENDPOINT" to "https://api.honeycomb.io",
+//        "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT" to "https://api.honeycomb.io/v1/traces",
+//        "OTEL_EXPORTER_OTLP_METRICS_ENDPOINT" to "https://api.honeycomb.io/v1/metrics",
+        "OTEL_EXPORTER_OTLP_HEADERS" to "x-honeycomb-team=" + System.getenv("HONEYCOMB_API_KEY")
+    ))
+    jvmArgs = listOf(
+        "-javaagent:build/opentel/opentel.jar"
+    )
+}
 
+//bootRun {
+//    environment = ["HONEYCOMB_API_KEY": System.getenv("HONEYCOMB_API_KEY"),
+//    "OTEL_SERVICE_NAME": System.getenv("OTEL_SERVICE_NAME")]
+//    jvmArgs = ["-javaagent:honeycomb-opentelemetry-javaagent-1.5.2.jar"]
+//}
 //
 //bootJar {
 //    archiveFileName = 'timetable-service.jar'
@@ -85,6 +105,10 @@ configure<HoneycombExtension> {
 //        "build/new-relic:/platform/bindings/new-relic"
 //    ]
 //}
+//
+//newRelic {
+//    appName = "Demo"
+//}
 
 tasks.named<BootBuildImage>("bootBuildImage") {
 //    builder.set("mine/java-cnb-builder")
@@ -95,11 +119,9 @@ tasks.named<BootBuildImage>("bootBuildImage") {
 //            "gcr.io/paketo-buildpacks/opentelemetry"
 //            "gcr.io/paketo-buildpacks/new-relic"
     ))
-    environment.set(mapOf(
+    environment = mapOf(
             "BP_OPENTELEMETRY_ENABLED" to "true"
-    ))
+    )
+
 }
-//
-//newRelic {
-//    appName = "Demo"
-//}
+

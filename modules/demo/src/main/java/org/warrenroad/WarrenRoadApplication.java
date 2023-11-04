@@ -12,10 +12,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 @EnableJpaRepositories(
@@ -27,9 +30,35 @@ public class WarrenRoadApplication {
         SpringApplication.run(WarrenRoadApplication.class, args);
     }
 
+    public record Result(
+            String name,
+            String description,
+            A a
+    ) {
+    }
+
+    @RestController
+    public static class First {
+
+        private final A.ARepository repository;
+
+        public First(final A.ARepository repository) {
+            this.repository = repository;
+        }
+
+        @GetMapping("/f")
+        public Set<Result> get() {
+            return repository.findAll().stream()
+                    .map(a -> new Result(
+                            "Name: %s".formatted(a.code),
+                            "Description:  %s".formatted(a.code),
+                            a))
+                    .collect(Collectors.toSet());
+        }
+    }
 
     @Component
-    public class Setup implements CommandLineRunner {
+    public static class Setup implements CommandLineRunner {
 
         private static final Logger LOGGER = LoggerFactory.getLogger(Setup.class);
 

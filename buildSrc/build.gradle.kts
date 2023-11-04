@@ -31,5 +31,9 @@ gradlePlugin {
             id = "honeycomb"
             implementationClass = "org.warrenroad.HoneycombPlugin"
         }
+        create("opentel") {
+            id = "opentel"
+            implementationClass = "org.warrenroad.OpenTelPlugin"
+        }
     }
 }

@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  demo:
+    container_name: demo
+    image: demo
+    restart: always
+    environment:
+      OTEL_JAVAAGENT_ENABLED: 'true'
+      OTEL_EXPORTER_OTLP_ENDPOINT: 'https://api.honeycomb.io'
+      OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
+      OTEL_SERVICE_NAME: "Demo"
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: 'https://api.honeycomb.io'
+      OTEL_EXPORTER_OTLP_METRICS_ENDPOINT: 'https://api.honeycomb.io'
+    ports:
+      - 8080:8080
+
+#  postgres:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.postgres
+#      target: runtime
+#      args:
+#        POSTGRES_USER: guest
+#        POSTGRES_PASSWORD: guest
+#        POSTGRES_DUMP: ${BACKUP_FILE}
+#        POSTGRES_USER: guest
+#        POSTGRES_DB: guest
+#    container_name: postgres
+#    restart: always
+#    environment:
+#      POSTGRES_USER: guest
+#      POSTGRES_PASSWORD: guest
+#      POSTGRES_DB: guest
+#    ports:
+#      - 5432:5432
+#    volumes:
+#      - postgres-data:/var/lib/postgresql/data
