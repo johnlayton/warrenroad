@@ -57,6 +57,29 @@ configure<HoneycombExtension> {
     appName = "WarrenRoad::Demo"
 }
 
+tasks.getByName<BootRun>("bootRun") {
+    setEnvironment(mapOf(
+            "HONEYCOMB_API_KEY" to System.getenv("HONEYCOMB_API_KEY"),
+            "OTEL_SERVICE_NAME" to System.getenv("Demo"),
+            "OTEL_EXPORTER_OTLP_ENDPOINT" to "https://api.honeycomb.io",
+            "OTEL_EXPORTER_OTLP_HEADERS" to "x-honeycomb-team=" + System.getenv("HONEYCOMB_API_KEY")
+    ))
+    jvmArgs = listOf(
+            "-javaagent:build/opentel/opentel.jar"
+    )
+}
+
+tasks.named<BootBuildImage>("bootBuildImage") {
+    buildpacks.set(listOf(
+            "urn:cnb:builder:paketo-buildpacks/java",
+            "gcr.io/paketo-buildpacks/opentelemetry"
+    ))
+    environment = mapOf(
+            "BP_OPENTELEMETRY_ENABLED" to "true"
+    )
+}
+
+
 //tasks.bootRun {
 //    jvmArgs = [
 //        '-javaagent:/newrelic.jar'
@@ -70,20 +93,21 @@ configure<HoneycombExtension> {
 //bootRun {
 //
 //}
-tasks.getByName<BootRun>("bootRun") {
-//    main = "com.example.ExampleApplication"
-    setEnvironment(mapOf(
-        "HONEYCOMB_API_KEY" to System.getenv("HONEYCOMB_API_KEY"),
-        "OTEL_SERVICE_NAME" to System.getenv("Demo"),
-        "OTEL_EXPORTER_OTLP_ENDPOINT" to "https://api.honeycomb.io",
-//        "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT" to "https://api.honeycomb.io/v1/traces",
-//        "OTEL_EXPORTER_OTLP_METRICS_ENDPOINT" to "https://api.honeycomb.io/v1/metrics",
-        "OTEL_EXPORTER_OTLP_HEADERS" to "x-honeycomb-team=" + System.getenv("HONEYCOMB_API_KEY")
-    ))
-    jvmArgs = listOf(
-        "-javaagent:build/opentel/opentel.jar"
-    )
-}
+//tasks.getByName<BootRun>("bootRun") {
+////    main = "com.example.ExampleApplication"
+//    setEnvironment(mapOf(
+//        "HONEYCOMB_API_KEY" to System.getenv("HONEYCOMB_API_KEY"),
+//        "OTEL_SERVICE_NAME" to System.getenv("Demo"),
+//        "OTEL_EXPORTER_OTLP_ENDPOINT" to "https://api.honeycomb.io",
+////        "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT" to "https://api.honeycomb.io/v1/traces",
+////        "OTEL_EXPORTER_OTLP_METRICS_ENDPOINT" to "https://api.honeycomb.io/v1/metrics",
+//        "OTEL_EXPORTER_OTLP_HEADERS" to "x-honeycomb-team=" + System.getenv("HONEYCOMB_API_KEY")
+//    ))
+//    jvmArgs = listOf(
+//        "-javaagent:build/opentel/opentel.jar"
+//    )
+//}
+
 
 //bootRun {
 //    environment = ["HONEYCOMB_API_KEY": System.getenv("HONEYCOMB_API_KEY"),
@@ -110,18 +134,19 @@ tasks.getByName<BootRun>("bootRun") {
 //    appName = "Demo"
 //}
 
-tasks.named<BootBuildImage>("bootBuildImage") {
-//    builder.set("mine/java-cnb-builder")
-//    runImage.set("mine/java-cnb-run")
-    buildpacks.set(listOf(
-            "urn:cnb:builder:paketo-buildpacks/java",
-            "gcr.io/paketo-buildpacks/opentelemetry"
+//tasks.named<BootBuildImage>("bootBuildImage") {
+////    builder.set("mine/java-cnb-builder")
+////    runImage.set("mine/java-cnb-run")
+//    buildpacks.set(listOf(
+//            "urn:cnb:builder:paketo-buildpacks/java",
 //            "gcr.io/paketo-buildpacks/opentelemetry"
-//            "gcr.io/paketo-buildpacks/new-relic"
-    ))
-    environment = mapOf(
-            "BP_OPENTELEMETRY_ENABLED" to "true"
-    )
+////            "gcr.io/paketo-buildpacks/opentelemetry"
+////            "gcr.io/paketo-buildpacks/new-relic"
+//    ))
+//    environment = mapOf(
+//            "BP_OPENTELEMETRY_ENABLED" to "true"
+//    )
+//
+//}
 
-}
 
