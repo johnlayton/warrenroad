@@ -7,12 +7,48 @@ spring:
     url: jdbc:h2:mem:db
     username: sa
     password:
+
   jpa:
     hibernate:
       ddl-auto: create-drop
     database-platform: org.hibernate.dialect.H2Dialect
-    show-sql: true
+    show-sql: false
+
   h2:
     console:
       enabled: true
 
+management:
+  server:
+    port: 8081
+
+#  tracing:
+#    baggage:
+#      correlation:
+#        enabled: true
+
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-components: always
+      show-details: always
+
+  health:
+    rabbit:
+      enabled: true
+    db:
+      enabled: true
+
+  info:
+    build:
+      enabled: true
+    git:
+      enabled: true
+      mode: simple

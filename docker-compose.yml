@@ -12,6 +12,9 @@ services:
       OTEL_SERVICE_NAME: "Demo"
       OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: 'https://api.honeycomb.io'
       OTEL_EXPORTER_OTLP_METRICS_ENDPOINT: 'https://api.honeycomb.io'
+      OTEL_TRACES_EXPORTER: 'logging'
+      OTEL_METRICS_EXPORTER: 'logging'
+      OTEL_LOGS_EXPORTER: 'logging'
     ports:
       - 8080:8080
 

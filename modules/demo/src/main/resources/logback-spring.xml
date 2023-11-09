@@ -1,5 +1,6 @@
 <configuration>
 
+<!--
     <springProfile name="default">
         <include resource="org/springframework/boot/logging/logback/base.xml"/>
     </springProfile>
@@ -7,6 +8,7 @@
     <springProfile name="dev">
         <include resource="org/springframework/boot/logging/logback/base.xml"/>
     </springProfile>
+-->
 
 <!--
     <springProfile name="default">
@@ -20,5 +22,60 @@
         </root>
     </springProfile>
 -->
+
+    <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <provider class="jdlf.compass.common.logging.ExceptionLogDetailsProvider"/>
+        </encoder>
+    </appender>
+
+    <springProfile name="json">
+        <appender name="devConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+<!--
+                <provider class="jdlf.compass.common.logging.ExceptionLogDetailsProvider"/>
+-->
+                <jsonGeneratorDecorator class="net.logstash.logback.decorate.PrettyPrintingJsonGeneratorDecorator"/>
+            </encoder>
+        </appender>
+    </springProfile>
+
+    <springProfile name="!json">
+        <appender name="devConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{HH:mm:ss.SSS} %logger %-5level- %msg%n</pattern>
+            </encoder>
+        </appender>
+    </springProfile>
+
+    <springProfile name="dev | scorched">
+        <root level="INFO">
+            <appender-ref ref="devConsoleAppender"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="staging">
+        <root level="INFO">
+            <appender-ref ref="jsonConsoleAppender"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="hotfix">
+        <root level="INFO">
+            <appender-ref ref="jsonConsoleAppender"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="jsonConsoleAppender"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="test">
+        <root level="INFO">
+            <appender-ref ref="jsonConsoleAppender"/>
+        </root>
+    </springProfile>
 
 </configuration>

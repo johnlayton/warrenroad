@@ -43,9 +43,17 @@ dependencies {
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.data.jpa)
     implementation(libs.spring.boot.starter.data.rest)
+    implementation(libs.spring.boot.starter.actuator)
 //    implementation(libs.springdoc.openapi.starter.webmvc.ui)
 //    implementation(libs.springdoc.openapi.starter.webmvc.api)
     implementation(libs.h2)
+    implementation(platform(libs.micrometer.tracing.bom))
+    implementation(libs.opentelemetry.annotations)
+    implementation(libs.micrometer.tracing)
+    implementation(libs.micrometer.tracing.bridge.otel)
+    implementation(libs.micrometer.registry.prometheus)
+//    implementation(libs.logback.classic)
+    implementation(libs.logstash.logback.encoder)
 }
 
 
@@ -62,7 +70,10 @@ tasks.getByName<BootRun>("bootRun") {
             "HONEYCOMB_API_KEY" to System.getenv("HONEYCOMB_API_KEY"),
             "OTEL_SERVICE_NAME" to System.getenv("Demo"),
             "OTEL_EXPORTER_OTLP_ENDPOINT" to "https://api.honeycomb.io",
-            "OTEL_EXPORTER_OTLP_HEADERS" to "x-honeycomb-team=" + System.getenv("HONEYCOMB_API_KEY")
+            "OTEL_EXPORTER_OTLP_HEADERS" to "x-honeycomb-team=" + System.getenv("HONEYCOMB_API_KEY"),
+            "OTEL_TRACES_EXPORTER" to "logging",
+            "OTEL_METRICS_EXPORTER" to "logging",
+            "OTEL_LOGS_EXPORTER" to "logging"
     ))
     jvmArgs = listOf(
             "-javaagent:build/opentel/opentel.jar"

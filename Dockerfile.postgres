@@ -1,0 +1,41 @@
+FROM postgres:13-alpine AS builder
+
+ARG POSTGRES_USER
+ARG POSTGRES_PASSWORD
+ARG POSTGRES_DB
+ARG POSTGRES_DUMP
+
+ENV POSTGRES_USER ${POSTGRES_USER}
+ENV POSTGRES_PASSWORD ${POSTGRES_PASSWORD}
+ENV POSTGRES_DB ${POSTGRES_DB}
+ENV POSTGRES_DUMP ${POSTGRES_DUMP}
+
+# TODO: make sure the postgres user owns PGDATA and has access to an new directories
+USER ${POSTGRES_USER}
+
+RUN echo `whoami`
+
+# set pgdata to some path outside the VOLUME that is declared in the image
+ENV PGDATA /var/lib/postgresql/custom
+
+COPY initdb.d/ /docker-entrypoint-initdb.d/
+COPY bin/custom-entrypoint.sh /usr/local/bin/
+
+#RUN echo "$(ls -al)"
+
+#RUN chown -R postgres:postgres /usr/local/bin/custom-entrypoint.sh
+
+RUN custom-entrypoint.sh postgres || exit 0
+#RUN custom-entrypoint.sh postgres
+#RUN custom-entrypoint.sh postgres || exit 0
+
+ENTRYPOINT [ "custom-entrypoint.sh" ]
+
+CMD [ "postgres" ]
+
+FROM postgres:13-alpine as runtime
+
+COPY --from=builder /var/lib/postgresql/custom $PGDATA
+
+#EXPOSE 5432
+

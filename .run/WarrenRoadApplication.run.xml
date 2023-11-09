@@ -1,0 +1,20 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="WarrenRoadApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <option name="ACTIVE_PROFILES" value="dev,json" />
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/dev.env" />
+    </option>
+    <module name="warrenroad.modules.demo.main" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="org.warrenroad.WarrenRoadApplication" />
+<!--
+    <option name="VM_PARAMETERS" value="-javaagent:build/opentel/opentel.jar" />
+-->
+    <option name="WORKING_DIRECTORY" value="file://$MODULE_DIR$" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

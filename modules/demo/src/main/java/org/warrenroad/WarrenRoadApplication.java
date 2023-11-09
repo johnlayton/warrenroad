@@ -1,13 +1,19 @@
 package org.warrenroad;
 
+import io.micrometer.tracing.Tracer;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import org.hibernate.annotations.GenericGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -19,6 +25,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static net.logstash.logback.argument.StructuredArguments.kv;
 
 @SpringBootApplication
 @EnableJpaRepositories(
@@ -37,16 +45,55 @@ public class WarrenRoadApplication {
     ) {
     }
 
+    @Configuration
+    public static class BaggageConfiguration {
+
+        private static final Logger LOGGER = LoggerFactory.getLogger(BaggageConfiguration.class);
+
+//        @Autowired
+        private final Tracer tracer;
+
+        public BaggageConfiguration(Tracer tracer) {
+            this.tracer = tracer;
+//            tracer.createBaggage("USER_ID", "USER_ID_VALUE");
+//            LOGGER.error("Some message");
+        }
+
+//        @Bean
+//        @Qualifier("buildNameField")
+//        public BaggageField buildNameField(final BuildProperties buildProperties) {
+////            return BaggageFields.constant("build-name", buildProperties.getName());
+//        }
+    }
+
     @RestController
-    public static class First {
+    public static class FirstController {
 
-        private final A.ARepository repository;
+        private static final Logger LOGGER = LoggerFactory.getLogger(FirstController.class);
+        private final FirstService service;
 
-        public First(final A.ARepository repository) {
-            this.repository = repository;
+        public FirstController(FirstService service) {
+            this.service = service;
         }
 
         @GetMapping("/f")
+        @WithSpan("FirstController::get")
+        public Set<Result> get() {
+            LOGGER.info("first controller get {}", kv("property", "value"));
+            return service.get();
+        }
+    }
+
+    @Component
+    public static class FirstService {
+
+        private final A.ARepository repository;
+
+        public FirstService(final A.ARepository repository) {
+            this.repository = repository;
+        }
+
+        @WithSpan("FirstService::get")
         public Set<Result> get() {
             return repository.findAll().stream()
                     .map(a -> new Result(
@@ -56,6 +103,7 @@ public class WarrenRoadApplication {
                     .collect(Collectors.toSet());
         }
     }
+
 
     @Component
     public static class Setup implements CommandLineRunner {

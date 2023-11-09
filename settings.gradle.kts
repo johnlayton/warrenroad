@@ -18,5 +18,5 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "warrenroad"
 
 include(
-        "modules:demo"
+    "modules:demo"
 )
